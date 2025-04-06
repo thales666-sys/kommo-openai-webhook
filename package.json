@@ -1,12 +1,26 @@
-package.json{
+{
   "name": "kommo-openai-webhook",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
+     "start": "node index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thales666-sys/kommo-openai-webhook.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thales666-sys/kommo-openai-webhook/issues"
+  },
+  "homepage": "https://github.com/thales666-sys/kommo-openai-webhook#readme",
+  "description": "",
   "dependencies": {
-    "axios": "^1.6.0",
-    "express": "^4.18.2"
+    "axios": "^1.8.4",
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0"
   }
 }

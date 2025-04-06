@@ -1,65 +1,42 @@
-const express = require('express');
-const axios = require('axios');
+const express = require("express");
+const bodyParser = require("body-parser");
+const axios = require("axios");
 const app = express();
+const port = process.env.PORT || 3000;
 
-app.use(express.json());
+app.use(bodyParser.json());
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+app.post("/", async (req, res) => {
+  const userMessage = req.body.message;
 
-app.post('/webhook', async (req, res) => {
   try {
-    const response = await axios.post(
-      'https://api.openai.com/v1/chat/completions',
+    const openaiResponse = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
       {
-        model: 'gpt-4',
+        model: "gpt-3.5-turbo",
         messages: [
           {
-            role: 'system',
-            content: 'Escolha aleatoriamente entre os nomes Rogerio, Carla e Lucas, e retorne a frase: "Meu nome é [nome escolhido] e vou te atender hoje." Apenas isso. Não adicione mais nada.'
+            role: "user",
+            content: userMessage,
           },
-          {
-            role: 'user',
-            content: 'Gere a frase.'
-          }
         ],
-        temperature: 1
       },
       {
         headers: {
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
       }
     );
 
-    const frase = response.data.choices[0].message.content;
-
-    res.json({
-      execute_handlers: [
-        {
-          handler: 'show',
-          params: {
-            type: 'text',
-            value: frase
-          }
-        }
-      ]
-    });
+    const reply = openaiResponse.data.choices[0].message.content;
+    res.json({ reply });
   } catch (error) {
-    console.error('Erro ao chamar OpenAI:', error.response?.data || error.message);
-    res.status(500).json({
-      execute_handlers: [
-        {
-          handler: 'show',
-          params: {
-            type: 'text',
-            value: 'Desculpe, houve um erro ao gerar a resposta.'
-          }
-        }
-      ]
-    });
+    console.error("Erro ao chamar OpenAI:", error.response?.data || error.message);
+    res.status(500).json({ error: "Erro interno na IA" });
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`);
+});
