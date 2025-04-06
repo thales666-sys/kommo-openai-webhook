@@ -3,18 +3,26 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware para aceitar JSON e x-www-form-urlencoded
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.post("/", async (req, res) => {
-  console.log("=== Webhook recebido da Kommo ===");
+  try {
+    const nomes = ["Rogério", "Lucas", "Edna"];
+    const nomeAleatorio = nomes[Math.floor(Math.random() * nomes.length)];
 
-  // Exibe os headers e o corpo da requisição para debug
-  console.log("Headers:", JSON.stringify(req.headers, null, 2));
-  console.log("Body:", JSON.stringify(req.body, null, 2));
+    const frase = `${nomeAleatorio}, tudo bem? Em que posso ajudar?`;
 
-  res.send("Webhook recebido com sucesso da Kommo!");
+    console.log("== Webhook recebido da Kommo ==");
+    console.log("Headers:", req.headers);
+    console.log("Body:", req.body);
+    console.log("Resposta enviada:", frase);
+
+    res.send(frase);
+  } catch (error) {
+    console.error("Erro ao processar webhook:", error.message);
+    res.status(500).send("Erro ao processar o webhook.");
+  }
 });
 
 app.get("/", (req, res) => {
