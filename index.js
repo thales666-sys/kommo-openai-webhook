@@ -1,34 +1,28 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.post("/", async (req, res) => {
-  try {
-    const nomes = ["Rogério", "Lucas", "Edna"];
-    const nomeAleatorio = nomes[Math.floor(Math.random() * nomes.length)];
+const nomes = ["Rogério", "Lucas", "Edna"];
+const fraseBase = ", tudo bem? Em que posso ajudar?";
 
-    const frase = `${nomeAleatorio}, tudo bem? Em que posso ajudar?`;
+app.post("/", (req, res) => {
+  console.log("== Webhook recebido da Kommo ==");
+  console.log("Headers:", req.headers);
+  console.log("Body:", req.body);
 
-    console.log("== Webhook recebido da Kommo ==");
-    console.log("Headers:", req.headers);
-    console.log("Body:", req.body);
-    console.log("Resposta enviada:", frase);
+  const nomeAleatorio = nomes[Math.floor(Math.random() * nomes.length)];
+  const mensagem = `${nomeAleatorio}${fraseBase}`;
 
-    res.send(frase);
-  } catch (error) {
-    console.error("Erro ao processar webhook:", error.message);
-    res.status(500).send("Erro ao processar o webhook.");
-  }
+  console.log("Resposta enviada:", mensagem);
+
+  // Envia a resposta como JSON para que o Salesbot entenda
+  res.json({ text: mensagem });
 });
 
-app.get("/", (req, res) => {
-  res.send("Servidor do webhook está online!");
-});
-
-app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
