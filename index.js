@@ -1,13 +1,20 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const axios = require("axios");
+
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Middleware para JSON
 app.use(bodyParser.json());
 
+// Rota POST principal
 app.post("/", async (req, res) => {
   const userMessage = req.body.message;
+
+  if (!userMessage) {
+    return res.status(400).json({ error: "Mensagem do usuário ausente." });
+  }
 
   try {
     const openaiResponse = await axios.post(
@@ -37,6 +44,12 @@ app.post("/", async (req, res) => {
   }
 });
 
+// Rota GET para teste simples
+app.get("/", (req, res) => {
+  res.send("Servidor ativo. Use POST / com { message } no corpo para interagir.");
+});
+
+// Inicia o servidor
 app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
+  console.log(`Servidor rodando na porta ${port}`);
 });
