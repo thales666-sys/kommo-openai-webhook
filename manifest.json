@@ -1,0 +1,25 @@
+{
+    "name": {
+      "en": "AI Assistant",
+      "pt": "Assistente de IA"
+    },
+    "description": {
+      "en": "Responds to your leads with smart, randomized messages using OpenAI.",
+      "pt": "Responde seus leads com mensagens inteligentes e aleatórias usando a OpenAI."
+    },
+    "version": "1.0.0",
+    "url": "https://kommo-openai-webhook.onrender.com",
+    "support": {
+      "email": "contato@vengergames.com.br"
+    },
+    "icon": "https://kommo-openai-webhook.onrender.com/logo.png",
+    "settings": [],
+    "locations": {
+      "lead_card": {
+        "view": {
+          "url": "https://kommo-openai-webhook.onrender.com/widget"
+        }
+      }
+    }
+  }
+  
