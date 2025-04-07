@@ -1,28 +1,37 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
-const PORT = process.env.PORT || 10000;
+const port = process.env.PORT || 10000;
 
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-const nomes = ["Rogério", "Lucas", "Edna"];
-const fraseBase = ", tudo bem? Em que posso ajudar?";
+const nomes = ['Rogério', 'Lucas', 'Edna'];
 
-app.post("/", (req, res) => {
-  console.log("== Webhook recebido da Kommo ==");
-  console.log("Headers:", req.headers);
-  console.log("Body:", req.body);
+app.post('/', (req, res) => {
+  const body = req.body;
 
+  console.log('== Webhook recebido da Kommo ==');
+  console.log('Headers:', req.headers);
+  console.log('Body:', body);
+
+  // Checa se é uma chamada de etapa adaptada do Salesbot
+  if (body.handler === 'random_nome') {
+    const nomeAleatorio = nomes[Math.floor(Math.random() * nomes.length)];
+    return res.json({
+      result: {
+        resposta_nome: nomeAleatorio
+      }
+    });
+  }
+
+  // Caso não seja uma chamada de Salesbot, apenas envia uma resposta padrão
   const nomeAleatorio = nomes[Math.floor(Math.random() * nomes.length)];
-  const mensagem = `${nomeAleatorio}${fraseBase}`;
-
-  console.log("Resposta enviada:", mensagem);
-
-  // Envia a resposta como JSON para que o Salesbot entenda
-  res.send(`${nome}, tudo bem? Em que posso ajudar?`)
+  const resposta = `${nomeAleatorio}, tudo bem? Em que posso ajudar?`;
+  console.log('Resposta enviada:', resposta);
+  res.send(resposta);
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`);
 });
