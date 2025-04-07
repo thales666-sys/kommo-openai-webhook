@@ -20,7 +20,7 @@ app.post('/', (req, res) => {
     },
     messages: [
       {
-        text: "{{resposta_nome}}, tudo bem? Em que posso ajudar?"
+        text: nomeAleatorio + ", tudo bem? Em que posso ajudar?"
       }
     ]
   };
