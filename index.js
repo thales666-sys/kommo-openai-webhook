@@ -15,21 +15,25 @@ app.post('/', (req, res) => {
   console.log('Headers:', req.headers);
   console.log('Body:', body);
 
-  // Checa se é uma chamada de etapa adaptada do Salesbot
-  if (body.handler === 'random_nome') {
-    const nomeAleatorio = nomes[Math.floor(Math.random() * nomes.length)];
-    return res.json({
-      result: {
-        resposta_nome: nomeAleatorio
-      }
-    });
-  }
-
-  // Caso não seja uma chamada de Salesbot, apenas envia uma resposta padrão
+  // Sorteia nome aleatório
   const nomeAleatorio = nomes[Math.floor(Math.random() * nomes.length)];
-  const resposta = `${nomeAleatorio}, tudo bem? Em que posso ajudar?`;
-  console.log('Resposta enviada:', resposta);
-  res.send(resposta);
+
+  // Retorna estrutura compatível com etapa adaptada do Salesbot
+  res.json({
+    handler: "random_nome",
+    data: {
+      resposta_nome: nomeAleatorio
+    },
+    execute_handlers: [
+      {
+        handler: "show",
+        params: {
+          type: "text",
+          value: "{{resposta_nome}}, tudo bem? Em que posso ajudar?"
+        }
+      }
+    ]
+  });
 });
 
 app.listen(port, () => {
