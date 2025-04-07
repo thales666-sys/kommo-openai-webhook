@@ -14,14 +14,20 @@ app.post('/', (req, res) => {
   console.log('== Webhook recebido ==');
   console.log('Nome sorteado:', nomeAleatorio);
 
-  // 🔧 Salesbot espera resposta nesse formato específico:
-  res.json({
-    data: {
-      response: {
-        resposta_nome: nomeAleatorio
+  const resposta = {
+    set_variables: {
+      resposta_nome: nomeAleatorio
+    },
+    messages: [
+      {
+        text: "{{resposta_nome}}, tudo bem? Em que posso ajudar?"
       }
-    }
-  });
+    ]
+  };
+
+  console.log(">> RESPOSTA ENVIADA AO KOMMO <<", JSON.stringify(resposta, null, 2));
+
+  res.json(resposta);
 });
 
 app.listen(port, () => {
