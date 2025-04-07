@@ -20,7 +20,7 @@ app.post("/", (req, res) => {
   console.log("Resposta enviada:", mensagem);
 
   // Envia a resposta como JSON para que o Salesbot entenda
-  res.json({ text: mensagem });
+  res.send(`${nome}, tudo bem? Em que posso ajudar?`)
 });
 
 app.listen(PORT, () => {
